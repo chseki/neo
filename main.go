@@ -199,6 +199,8 @@ func readSecretsFromNamespace(namespace string) error {
 			continue
 		case strings.Contains(s, "registry"):
 			continue
+		case strings.Contains(s, "pod-autoscaler-token"):
+			continue
 		case strings.TrimSpace(s) == "":
 			continue
 		default:

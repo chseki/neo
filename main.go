@@ -36,8 +36,26 @@ type cluster struct {
 	operator string
 }
 
-func (cls *cluster) Generate() {
+func (cls *cluster) Generate(from string) {
+	if from == "" {
+		helper()
+	}
 
+	err := readSecretsFromNamespace(from)
+	if err != nil {
+		log.Fatalln(err)
+	}
+
+	cmd := exec.Command("mv", "go-secrets", homePath+from+"-secrets")
+
+	var out bytes.Buffer
+	cmd.Stdout = &out
+	err = cmd.Run()
+	if err != nil {
+		log.Fatalln(err)
+	}
+
+	fmt.Printf("Manifests were successfully created in: %v\n", homePath+from+"-secrets")
 }
 
 // Initialize function, get HOME path
@@ -57,7 +75,18 @@ func main() {
 	flag.Parse()
 
 	if *gen {
-
+		if *kops != "" {
+			clsKops := cluster{env: *kops, operator: "kops"}
+			switchToCluster(clsKops)
+			clsKops.Generate(*fromNS)
+		} else if *eks != "" {
+			clsEks := cluster{env: *eks, operator: "eks"}
+			switchToCluster(clsEks)
+			clsEks.Generate(*fromNS)
+		} else {
+			helper()
+		}
+		return
 	}
 
 	// if flag gets it default value exit with error

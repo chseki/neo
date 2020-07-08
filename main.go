@@ -36,6 +36,10 @@ type cluster struct {
 	operator string
 }
 
+func (cls *cluster) Generate() {
+
+}
+
 // Initialize function, get HOME path
 func init() {
 	homePath = os.Getenv("HOME") + "/"
@@ -47,13 +51,18 @@ func main() {
 	eks := flag.String("eks", "", "eks cluster to executing script")
 	fromNS := flag.String("from", "", "namespace to read secrets")
 	toNS := flag.String("to", "", "namespace to apply secrets manifest")
+	gen := flag.Bool("generate", false, "indicate if just need to generate yaml secrets manifest")
 
 	// try to parse flags
 	flag.Parse()
 
+	if *gen {
+
+	}
+
 	// if flag gets it default value exit with error
 	if *fromNS == "" || *toNS == "" || *kops == "" || *eks == "" {
-		log.Fatalln("Error: unknown command for go-copy.\nUsage: go-copy -kops=env -eks=env -from=namespace -to=namespace")
+		helper()
 	}
 
 	clsKops := cluster{env: *kops, operator: "kops"}
@@ -92,6 +101,18 @@ func getSecrets(ns string) {
 	}
 
 	fmt.Println(out.String())
+}
+
+func helper() {
+	log.Fatalln(`Error: unknown command for go-copy.
+	Usages: 
+	go-copy -kops=env -eks=env -from=namespace -to=namespace
+	go-copy -generate -from=namespace [-kops=env || -eks=env]
+
+	Examples:
+	go-copy -kops=stage -eks=stage -from=analytics -to=analytics
+	go-copy -generate -from=analytics -kops=stage
+	`)
 }
 
 // remove go-secrets directory which was used to apply all manifests created in read in operation

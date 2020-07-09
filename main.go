@@ -303,9 +303,15 @@ func worker(name string, wg *sync.WaitGroup) {
 func createSecretYAML(secret bytes.Buffer) {
 	s := SecretYaml{}
 
-	_ = yaml.Unmarshal(secret.Bytes(), &s)
+	err := yaml.Unmarshal(secret.Bytes(), &s)
+	if err != nil {
+		log.Fatalln(err)
+	}
 
-	y, _ := yaml.Marshal(s)
+	y, err := yaml.Marshal(s)
+	if err != nil {
+		log.Fatalln(err)
+	}
 
 	ioutil.WriteFile(s.Metadata.Name+"-secret.yaml", y, 0644)
 }

@@ -62,6 +62,24 @@ func (cls *cluster) Generate(from string) {
 	fmt.Printf("Manifests were successfully created in: %v\n", path)
 }
 
+func (cls *cluster) readSecrets(from string) {
+	switchToCluster(*cls)
+
+	err := readSecretsFromNamespace(from)
+	if err != nil {
+		log.Fatalln(err)
+	}
+}
+
+func (cls *cluster) writeSecrets(to string) {
+	switchToCluster(*cls)
+
+	err := writeSecretsToNamespace(to)
+	if err != nil {
+		log.Fatalln(err)
+	}
+}
+
 // Initialize function, get HOME path
 func init() {
 	homePath = os.Getenv("HOME") + "/"
@@ -99,20 +117,10 @@ func main() {
 	}
 
 	clsKops := cluster{env: *kops, operator: "kops"}
-	switchToCluster(clsKops)
-
-	err := readSecretsFromNamespace(*fromNS)
-	if err != nil {
-		log.Fatalln(err)
-	}
+	clsKops.readSecrets(*fromNS)
 
 	clsEks := cluster{env: *eks, operator: "eks"}
-	switchToCluster(clsEks)
-
-	err = writeSecretsToNamespace(*toNS)
-	if err != nil {
-		log.Fatalln(err)
-	}
+	clsEks.writeSecrets(*toNS)
 
 	log.Println("Removing manifests from system...")
 	if err := clean(); err != nil {
@@ -136,6 +144,7 @@ func getSecrets(ns string) {
 	fmt.Println(out.String())
 }
 
+// helper function
 func helper() {
 	log.Fatalln(`Error: unknown command for go-copy.
 	Usages: 

@@ -108,7 +108,7 @@ func main() {
 		default:
 			helper()
 		}
-		return
+		os.Exit(0)
 	}
 
 	// if flag gets it default value exit with error

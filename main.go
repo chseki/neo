@@ -41,12 +41,16 @@ func (cls *cluster) Generate(from string) {
 		helper()
 	}
 
+	switchToCluster(*cls)
+
 	err := readSecretsFromNamespace(from)
 	if err != nil {
 		log.Fatalln(err)
 	}
 
-	cmd := exec.Command("mv", "go-secrets", homePath+from+"-secrets")
+	path := homePath + from + "-secrets"
+
+	cmd := exec.Command("mv", "go-secrets", path)
 
 	var out bytes.Buffer
 	cmd.Stdout = &out
@@ -55,7 +59,7 @@ func (cls *cluster) Generate(from string) {
 		log.Fatalln(err)
 	}
 
-	fmt.Printf("Manifests were successfully created in: %v\n", homePath+from+"-secrets")
+	fmt.Printf("Manifests were successfully created in: %v\n", path)
 }
 
 // Initialize function, get HOME path
@@ -64,7 +68,7 @@ func init() {
 }
 
 func main() {
-	// declaring flags
+	// declaring flags received from user
 	kops := flag.String("kops", "", "environment cluster to executing script")
 	eks := flag.String("eks", "", "eks cluster to executing script")
 	fromNS := flag.String("from", "", "namespace to read secrets")
@@ -74,16 +78,16 @@ func main() {
 	// try to parse flags
 	flag.Parse()
 
+	// if generate flag is true make a folder with all secrets from namespace
 	if *gen {
-		if *kops != "" {
+		switch {
+		case *kops != "":
 			clsKops := cluster{env: *kops, operator: "kops"}
-			switchToCluster(clsKops)
 			clsKops.Generate(*fromNS)
-		} else if *eks != "" {
+		case *eks != "":
 			clsEks := cluster{env: *eks, operator: "eks"}
-			switchToCluster(clsEks)
 			clsEks.Generate(*fromNS)
-		} else {
+		default:
 			helper()
 		}
 		return

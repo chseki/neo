@@ -282,6 +282,7 @@ func readSecretsFromNamespace(namespace string) error {
 	return err
 }
 
+// Goroutines are lightweight and running in concurrency
 // get yaml output from some secret and creates a new well-formatted YAML file
 // ignoring all unecessary metadata from original file such as namespace, created-at, last state and so on
 func worker(name string, wg *sync.WaitGroup) {

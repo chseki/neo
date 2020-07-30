@@ -13,8 +13,6 @@
   <img alt="License" src="https://img.shields.io/badge/license-MIT-%2304D361">
 </p>
 
----
-
 ## :book: How to use 
 
   - just type `neo -h` and save your time !

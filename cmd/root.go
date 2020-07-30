@@ -16,8 +16,8 @@ var cfgFile string
 var rootCmd = &cobra.Command{
 	Use:   "neo",
 	Short: "Neo is a CLI-assistant designed to help you with repetitive tasks",
-	Long: `Developed in GO with Cobra Library that is used in many Go projects
-such as Kubernetes, Hugo, and Gthub CLI.
+	Long: `Developed with Cobra Library that is used in many Go projects
+such as Kubernetes, Hugo, and Github CLI.
 
 Examples:
 	neo copy secrets -n lion

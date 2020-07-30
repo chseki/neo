@@ -58,7 +58,7 @@ func (s *secret) Copy(namespace string) {
 	info := color.New(color.FgHiGreen).SprintFunc()
 	exec := color.New(color.FgHiBlue).SprintFunc()
 
-	log.Printf("Manifests Successfully createad by Neo in %s", info(dir))
+	log.Printf("Manifests successfully createad by Neo in %s", info(dir))
 	fmt.Printf("just execute %s in your desired namespace\n", exec("kubectl apply -f "+namespace+"-"+s.name))
 }
 
@@ -79,7 +79,7 @@ func (c *configmap) Copy(namespace string) {
 	info := color.New(color.FgHiGreen).SprintFunc()
 	exec := color.New(color.FgHiBlue).SprintFunc()
 
-	log.Printf("Manifests Successfully createad by Neo in %s", info(dir))
+	log.Printf("Manifests successfully createad by Neo in %s", info(dir))
 	fmt.Printf("Execute %s in your desired namespace\n", exec("kubectl apply -f "+namespace+"-"+c.name))
 }
 
@@ -100,7 +100,7 @@ func (d *deployment) Copy(namespace string) {
 	info := color.New(color.FgHiGreen).SprintFunc()
 	exec := color.New(color.FgHiBlue).SprintFunc()
 
-	log.Printf("Manifests Successfully createad by Neo in %s", info(dir))
+	log.Printf("Manifests successfully createad by Neo in %s", info(dir))
 	fmt.Printf("Execute %s in your desired namespace\n", exec("kubectl apply -f "+namespace+"-"+d.name))
 }
 

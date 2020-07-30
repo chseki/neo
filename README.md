@@ -7,15 +7,14 @@
   Neo
 </h2>
 
-<p align="center">Neo is a cli-assistant idealized to help you with repetitive infrastructure tasks</p>
+<p align="center">Neo is a cli-assistant idealized to help you with repetitive tasks</p>
 
 <p align="center">
-  <a href="https://github.com/chseki">
-    <img alt="Made by Christian Seki" src="https://img.shields.io/badge/made%20by-Christian%20Seki-brightgreen">
-  </a>
   <img alt="License" src="https://img.shields.io/badge/license-MIT-%2304D361">
 </p>
 
 ---
 
-## Under Construction
+## :book: How to use 
+
+  - just type `neo -h` and save your time !

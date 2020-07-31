@@ -45,6 +45,9 @@ jobs:
     docker:
       - image: amazon/aws-cli:latest
     steps:
+      - run:
+          name: Installing tar
+          command: sudo apt-get install tar -y
       - restore_cache:
           keys: 
             - cache-go-binary-{{ .BuildNum }}
@@ -52,6 +55,7 @@ jobs:
       - run:
           name: Upload neo binary to S3 Amazon Bucket
           command: aws s3 cp /home/circleci/app/neo s3://geru-neo-binary
+
 
 # Orchestrate our job run sequence
 workflows:

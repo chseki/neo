@@ -51,7 +51,7 @@ jobs:
             - cache-go-binary-
       - run:
           name: Upload neo binary to S3 Amazon Bucket
-          command: aws s3 cp /app/neo s3://geru-neo-binary
+          command: aws s3 cp /home/circleci/app/neo s3://geru-neo-binary
 
 # Orchestrate our job run sequence
 workflows:

@@ -55,7 +55,7 @@ jobs:
 
 # Orchestrate our job run sequence
 workflows:
-  test-merge:
+  test-n-merge:
     jobs:
       - test:
           filters:

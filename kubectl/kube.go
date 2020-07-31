@@ -29,6 +29,7 @@ type Kubectl interface {
 	Copy(ns string)
 }
 
+// Objects available to interact with
 type (
 	secret struct {
 		name string

@@ -1,0 +1,80 @@
+defaults: &defaults
+  working_directory: ~/app
+  docker:
+    - image: circleci/golang:stretch
+
+version: 2.1
+
+# Define the jobs we want to run for this project
+
+jobs:
+  test:
+    docker:
+      - image: cimg/base:2020.01
+    steps:
+      - checkout
+      - run:
+          command: |
+            true
+  merge-master:
+    <<: *defaults
+    steps:
+      - checkout
+      - run:
+          name: Merging dev into master
+          command: |
+            git config --global user.email "chrisyuri_19@hotmail.com"
+            git config --global user.name "iamseki"
+            git checkout master
+            git pull origin master
+            git merge dev --no-ff --no-edit
+            git push origin master
+  compile:
+    <<: *defaults
+    steps:
+      - checkout
+      - run:
+          name: Compile GO binnary
+          command: |
+            cd neo 
+            CGO_ENABLED=0 GOOS=linux GOARCH=amd64 go build -ldflags="-w -s" -o neo .
+      - save_cache:
+          key: cache-go-binary-{{ .BuildNum }}
+          paths:
+            - ./neo
+  upload-s3:
+    docker:
+      - image: amazon/aws-cli:latest
+    steps:
+      - restore_cache:
+          keys: 
+            - cache-go-binary-{{ .BuildNum }}
+            - cache-go-binary-
+      - run:
+          name: Upload neo binary to S3 Amazon Bucket
+          command: aws s3 cp neo s3://geru-neo-binary
+
+# Orchestrate our job run sequence
+workflows:
+  test-compile-merge:
+    jobs:
+      - test:
+          filters:
+            branches:
+              only:
+                - dev
+      - compile:
+          requires:
+            - test
+      - merge-master:
+          requires:
+            - compile
+  upload-to-s3:
+    jobs:
+      - upload-s3:
+          filters:
+            branches:
+              only:
+                - master
+
+

@@ -47,7 +47,7 @@ jobs:
     steps:
       - run:
           name: Installing tar
-          command: yum install tar -y
+          command: yum install tar -y && yum install gzip -y 
       - restore_cache:
           keys: 
             - cache-go-binary-{{ .BuildNum }}

@@ -55,25 +55,26 @@ jobs:
 
 # Orchestrate our job run sequence
 workflows:
-  test-compile-merge:
+  test-merge:
     jobs:
       - test:
           filters:
             branches:
               only:
                 - dev
-      - compile:
-          requires:
-            - test
       - merge-master:
           requires:
-            - compile
-  upload-to-s3:
+            - test
+  compile-n-upload-s3:
     jobs:
-      - upload-s3:
+      - compile:
           filters:
             branches:
               only:
                 - master
+      - upload-s3:
+          requires:
+            - compile
+
 
 
